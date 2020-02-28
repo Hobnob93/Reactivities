@@ -45,7 +45,7 @@ namespace Application.Activities
                 context.Activities.Add(activity);
                 var success = await context.SaveChangesAsync() > 0;
 
-                if (success) 
+                if (success)
                     return Unit.Value;
                 throw new Exception("Error saving changes");
             }
