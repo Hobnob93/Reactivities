@@ -18,7 +18,7 @@ export const ActivityList: React.FC<IProps> = ({activities, selectActivity}) => 
                             <Item.Meta>{a.date}</Item.Meta>
                             <Item.Description>
                                 <div>{a.description}</div>
-                                <div>{a.city}, {a.vanue}</div>
+                                <div>{a.city}, {a.venue}</div>
                             </Item.Description>
                             <Item.Extra>
                                 <Button onClick={() => selectActivity(a.id)} floated="right" content="View" color="blue" />
