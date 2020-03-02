@@ -11,6 +11,8 @@ interface IProps {
     selectedActivity: IActivity | null;
     editMode: boolean;
     setEditMode: (editMode: boolean) => void;
+    createActivity: (activity: IActivity) => void;
+    editActivity: (activity: IActivity) => void;
 }
 
 export const ActivityDashboard: React.FC<IProps> = ({
@@ -18,7 +20,9 @@ export const ActivityDashboard: React.FC<IProps> = ({
     selectActivity,
     selectedActivity,
     editMode,
-    setEditMode
+    setEditMode,
+    createActivity,
+    editActivity
 }) => {
     return (
         <Grid>
@@ -37,6 +41,8 @@ export const ActivityDashboard: React.FC<IProps> = ({
                     <ActivityForm 
                         setEditMode={setEditMode}
                         activity={selectedActivity!}
+                        createActivity={createActivity}
+                        editActivity={editActivity}
                     />
                 )}
             </Grid.Column>
