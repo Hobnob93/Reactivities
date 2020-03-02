@@ -14,7 +14,8 @@ const App = () => {
     if (id === "")
       setSelectedActivity(null);
 
-    setSelectedActivity(activities.filter(a => a.id === id)[0])
+    setSelectedActivity(activities.filter(a => a.id === id)[0]);
+    setEditMode(false);
   };
 
   const handleOpenCreateForm = () => {
@@ -35,8 +36,14 @@ const App = () => {
   };
 
   useEffect(() => {
-    axios.get<IActivity[]>('http://localhost:5000/api/activities').then((response) => {
-        setActivities(response.data);
+    axios.get<IActivity[]>('http://localhost:5000/api/activities')
+      .then((response) => {
+          let activities: IActivity[] = [];
+          response.data.forEach(a => {
+            a.date = a.date.split(".")[0];
+            activities.push(a);
+          });
+          setActivities(activities);
     });
   }, []);
 
