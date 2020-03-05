@@ -12,30 +12,8 @@ const App = () => {
   const activityStore = useContext(ActivityStore)
 
   const [activities, setActivities] = useState<IActivity[]>([]);
-  const [selectedActivity, setSelectedActivity] = useState<IActivity | null>(null);
-  const [editMode, setEditMode] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [target, setTarget] = useState('');
-
-  const handleSelectActivity = (id: string) => {
-    if (id === "")
-      setSelectedActivity(null);
-
-    setSelectedActivity(activities.filter(a => a.id === id)[0]);
-    setEditMode(false);
-  };
-
-  const handleEditActivity = (activity: IActivity) => {
-    setSubmitting(true);
-    agent.Activities.update(activity)
-      .then(() => {
-        setActivities([...activities.filter(a => a.id !== activity.id), activity]);
-        setSelectedActivity(activity);
-        setEditMode(false);
-      }).then(() => {
-        setSubmitting(false);
-      });
-  };
 
   const handleDeleteActivity = (event: SyntheticEvent<HTMLButtonElement>, id: string) => {
     setSubmitting(true);
@@ -60,9 +38,6 @@ const App = () => {
       <Container style={{marginTop: '7em'}}>
         <List>
           <ActivityDashboard 
-            selectActivity={handleSelectActivity}
-            setEditMode={setEditMode}
-            editActivity={handleEditActivity}
             deleteActivity={handleDeleteActivity}
             submitting={submitting}
             target={target}
