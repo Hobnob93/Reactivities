@@ -1,16 +1,15 @@
-import React, { SyntheticEvent } from 'react'
+import React, { SyntheticEvent, useContext } from 'react'
 import { observer } from 'mobx-react-lite';
 import { Grid } from 'semantic-ui-react'
 import { IActivity } from '../../../app/models/activity'
 import ActivityList from './ActivityList'
 import ActivityDetails from '../details/ActivityDetails'
 import ActivityForm from '../form/ActivityForm'
+import ActivityStore from '../../../app/stores/activityStore'
 
 interface IProps {
     activities: IActivity[];
     selectActivity: (id: string) => void;
-    selectedActivity: IActivity | null;
-    editMode: boolean;
     submitting: boolean;
     target: string;
     setEditMode: (editMode: boolean) => void;
@@ -20,10 +19,7 @@ interface IProps {
 }
 
 export const ActivityDashboard: React.FC<IProps> = ({
-    activities,
     selectActivity,
-    selectedActivity,
-    editMode,
     submitting,
     target,
     setEditMode,
@@ -31,12 +27,13 @@ export const ActivityDashboard: React.FC<IProps> = ({
     editActivity,
     deleteActivity
 }) => {
+    const activityStore = useContext(ActivityStore);
+    const {editMode, selectedActivity} = activityStore;
+
     return (
         <Grid>
             <Grid.Column width={10}>
                 <ActivityList 
-                    activities={activities}
-                    selectActivity={selectActivity}
                     deleteActivity={deleteActivity}
                     submitting={submitting}
                     target={target}
@@ -45,7 +42,6 @@ export const ActivityDashboard: React.FC<IProps> = ({
             <Grid.Column width={6}>
                 {selectedActivity && !editMode && (
                     <ActivityDetails 
-                        activity={selectedActivity}
                         setEditMode={setEditMode}
                         selectActivity={selectActivity} 
                     />
