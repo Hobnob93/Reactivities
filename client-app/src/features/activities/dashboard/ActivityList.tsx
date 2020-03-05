@@ -15,12 +15,12 @@ export const ActivityList: React.FC<IProps> = ({
     deleteActivity
 }) => {
     const activityStore = useContext(ActivityStore);
-    const {activities, selectActivity} = activityStore;
+    const {activitiesByDate, selectActivity} = activityStore;
 
     return (
         <Segment clearing>
             <Item.Group divided>
-                {activities.map(a => 
+                {activitiesByDate.map(a => 
                     <Item key={a.id}>
                         <Item.Content>
                             <Item.Header as="a">{a.title}</Item.Header>
