@@ -15,13 +15,11 @@ export const ActivityList: React.FC = () => {
                     <Label size="large" color="blue">
                         {group}
                     </Label>
-                    <Segment clearing>
-                        <Item.Group divided>
-                            {activities.map(a => 
-                                <ActivityListItem key={a.id} activity={a} />
-                            )}
-                        </Item.Group>
-                    </Segment>
+                    <Item.Group divided>
+                        {activities.map(a => 
+                            <ActivityListItem key={a.id} activity={a} />
+                        )}
+                    </Item.Group>
                 </Fragment>
             ))}
         </Fragment>
