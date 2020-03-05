@@ -1,9 +1,19 @@
-import React from 'react'
+import React, { useEffect, useContext } from 'react'
 import { observer } from 'mobx-react-lite';
 import { Grid } from 'semantic-ui-react'
 import ActivityList from './ActivityList'
+import LoadingComponent from '../../../app/layout/LoadingComponent';
+import ActivityStore from '../../../app/stores/activityStore';
 
 export const ActivityDashboard: React.FC = () => {
+    const activityStore = useContext(ActivityStore)
+
+    useEffect(() => {
+        activityStore.loadActivities();
+    }, [activityStore]);
+
+    if (activityStore.loadingInitial) return <LoadingComponent content="Loading Activities..." />
+
     return (
         <Grid>
             <Grid.Column width={10}>

@@ -15,7 +15,7 @@ const ActivityForm: React.FC<RouteComponentProps<IDetailParams>> = ({
     history
 }) => {
     const activityStore = useContext(ActivityStore);
-    const {createActivity, editActivity, submitting, cancelFormOpen, activity: initialState, loadActivity, clearActivity} = activityStore;
+    const {createActivity, editActivity, submitting, activity: initialState, loadActivity, clearActivity} = activityStore;
 
     const [activity, setActivity] = useState<IActivity>({
         id: '',
@@ -69,7 +69,7 @@ const ActivityForm: React.FC<RouteComponentProps<IDetailParams>> = ({
                 <Form.Input onChange={handleInputChange} name="city" placeholder="City" value={activity.city} />
                 <Form.Input onChange={handleInputChange} name="venue" placeholder="Venue" value={activity.venue} />
                 <Button loading={submitting} floated="right" positive type="submit" content="Submit" />
-                <Button floated="right" type="button" content="Cancel" onClick={() => cancelFormOpen()} />
+                <Button floated="right" type="button" content="Cancel" onClick={() => history.push("/activities")} />
             </Form>
         </Segment>
     )
