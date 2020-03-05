@@ -1,13 +1,13 @@
-import React, { useState, FormEvent } from 'react'
+import React, { useState, FormEvent, useContext } from 'react'
 import { Segment, Form, Button } from 'semantic-ui-react'
 import { IActivity } from '../../../app/models/activity'
 import { v4 as uuid } from 'uuid';
+import ActivityStore from '../../../app/stores/activityStore';
 
 interface IProps {
     activity: IActivity;
     submitting: boolean;
     setEditMode: (editMode: boolean) => void;
-    createActivity: (activity: IActivity) => void;
     editActivity: (activity: IActivity) => void;
 }
 
@@ -15,9 +15,11 @@ const ActivityForm: React.FC<IProps> = ({
     activity: initialState,
     submitting,
     setEditMode, 
-    createActivity, 
     editActivity
 }) => {
+    const activityStore = useContext(ActivityStore);
+    const {createActivity} = activityStore;
+
     const initializeForm = () => {
         if (initialState) {
             return initialState;

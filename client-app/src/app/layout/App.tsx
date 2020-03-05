@@ -1,12 +1,12 @@
 import React, { useState, useEffect, Fragment, SyntheticEvent, useContext } from 'react';
 import { observer } from 'mobx-react-lite';
 import { List, Container } from 'semantic-ui-react';
-import { IActivity } from '../models/activity'
-import { NavBar } from '../../features/nav/NavBar';
+import { IActivity } from '../models/activity';
 import ActivityDashboard from '../../features/activities/dashboard/ActivityDashboard';
 import agent from '../api/agent';
 import LoadingComponent from './LoadingComponent';
 import ActivityStore from '../stores/activityStore'
+import NavBar from '../../features/nav/NavBar';
 
 const App = () => {
   const activityStore = useContext(ActivityStore)
@@ -23,23 +23,6 @@ const App = () => {
 
     setSelectedActivity(activities.filter(a => a.id === id)[0]);
     setEditMode(false);
-  };
-
-  const handleOpenCreateForm = () => {
-    setSelectedActivity(null);
-    setEditMode(true);
-  };
-
-  const handleCreateActivity = (activity: IActivity) => {
-    setSubmitting(true);
-    agent.Activities.create(activity)
-      .then(() => {
-        setActivities([...activities, activity]);
-        setSelectedActivity(activity);
-        setEditMode(false);
-      }).then(() => {
-        setSubmitting(false);
-      });
   };
 
   const handleEditActivity = (activity: IActivity) => {
@@ -73,14 +56,12 @@ const App = () => {
 
   return (
     <Fragment>
-      <NavBar openCreateForm={handleOpenCreateForm} />
+      <NavBar />
       <Container style={{marginTop: '7em'}}>
         <List>
           <ActivityDashboard 
-            activities={activityStore.activities}
             selectActivity={handleSelectActivity}
             setEditMode={setEditMode}
-            createActivity={handleCreateActivity}
             editActivity={handleEditActivity}
             deleteActivity={handleDeleteActivity}
             submitting={submitting}
