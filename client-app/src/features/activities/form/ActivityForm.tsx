@@ -1,6 +1,6 @@
 import React, { useState, FormEvent, useContext, useEffect } from 'react'
 import { Segment, Form, Button, Grid } from 'semantic-ui-react'
-import { IActivityFormValues } from '../../../app/models/activity'
+import { IActivityFormValues, ActivityFormValues } from '../../../app/models/activity'
 import { v4 as uuid } from 'uuid';
 import ActivityStore from '../../../app/stores/activityStore';
 import { observer } from 'mobx-react-lite';
@@ -22,31 +22,19 @@ const ActivityForm: React.FC<RouteComponentProps<IDetailParams>> = ({
     history
 }) => {
     const activityStore = useContext(ActivityStore);
-    const {createActivity, editActivity, submitting, activity: initialState, loadActivity, clearActivity} = activityStore;
+    const {submitting, loadActivity} = activityStore;
 
-    const [activity, setActivity] = useState<IActivityFormValues>({
-        id: undefined,
-        title: '',
-        category: '',
-        description: '',
-        date: undefined,
-        time: undefined,
-        city: '',
-        venue: ''
-    });
+    const [activity, setActivity] = useState(new ActivityFormValues());
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        if (match.params.id && activity.id) {
+        if (match.params.id) {
+            setLoading(true);
             loadActivity(match.params.id)
-                .then(() => {
-                    initialState && setActivity(initialState)
-                });
+                .then((activity) => setActivity(new ActivityFormValues(activity)))
+                .finally(() => setLoading(false));
         }
-
-        return () => {
-            clearActivity();
-        };
-    }, [match.params.id, loadActivity, clearActivity, initialState, activity.id]);
+    }, [match.params.id, loadActivity]);
 
     const handleFinalFormSubmit = (values: any) => {
         const dateAndTime = combineDateAndTime(values.date, values.time);
@@ -59,8 +47,8 @@ const ActivityForm: React.FC<RouteComponentProps<IDetailParams>> = ({
         <Grid>
             <Grid.Column width={10}>
                 <Segment clearing>
-                    <FinalForm onSubmit={handleFinalFormSubmit} render={({handleSubmit}) => (
-                        <Form onSubmit={handleSubmit}>
+                    <FinalForm onSubmit={handleFinalFormSubmit} initialValues={activity} render={({handleSubmit}) => (
+                        <Form loading={loading} onSubmit={handleSubmit}>
                             <Field name="title" placeholder="Title" value={activity.title} component={TextInput} />
                             <Field name="description" placeholder="Description" value={activity.description} component={TextAreaInput} rows={3} />
                             <Field name="category" placeholder="Category" value={activity.category} component={SelectInput} options={category} />
@@ -70,8 +58,8 @@ const ActivityForm: React.FC<RouteComponentProps<IDetailParams>> = ({
                             </Form.Group>
                             <Field name="city" placeholder="City" value={activity.city} component={TextInput} />
                             <Field name="venue" placeholder="Venue" value={activity.venue} component={TextInput} />
-                            <Button loading={submitting} floated="right" positive type="submit" content="Submit" />
-                            <Button floated="right" type="button" content="Cancel" onClick={() => history.push("/activities")} />
+                            <Button loading={submitting} disabled={loading} floated="right" positive type="submit" content="Submit" />
+                            <Button disabled={loading} floated="right" type="button" content="Cancel" onClick={() => history.push("/activities")} />
                         </Form>
                     )} />
                 </Segment>

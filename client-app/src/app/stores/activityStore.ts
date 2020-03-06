@@ -120,6 +120,7 @@ export class ActivityStore {
                 });
             }
         }
+        return activity;
     };
 
     @action clearActivity = () => {
