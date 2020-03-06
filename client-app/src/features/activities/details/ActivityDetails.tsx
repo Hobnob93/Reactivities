@@ -20,7 +20,7 @@ const ActivityDetails: React.FC<RouteComponentProps<IDetailParams>> = ({
     const {activity, loadActivity, loadingInitial} = activityStore;
     
     useEffect(() => {
-        loadActivity(match.params.id)
+        loadActivity(match.params.id);
     }, [loadActivity, match.params.id]);
 
     if (loadingInitial || !activity) return <LoadingComponent content="Loading activity..." />
