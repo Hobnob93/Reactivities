@@ -7,6 +7,7 @@ import { observer } from 'mobx-react-lite';
 import { RouteComponentProps } from 'react-router-dom';
 import { Form as FinalForm, Field } from 'react-final-form';
 import TextInput from '../../../app/common/form/TextInput';
+import TextAreaInput from '../../../app/common/form/TextAreaInput';
 
 interface IDetailParams {
     id: string;
@@ -67,7 +68,7 @@ const ActivityForm: React.FC<RouteComponentProps<IDetailParams>> = ({
                     <FinalForm onSubmit={handleFinalFormSubmit} render={({handleSubmit}) => (
                         <Form onSubmit={handleSubmit}>
                             <Field name="title" placeholder="Title" value={activity.title} component={TextInput} />
-                            <Field name="description" placeholder="Description" value={activity.description} component={TextInput} />
+                            <Field name="description" placeholder="Description" value={activity.description} component={TextAreaInput} rows={3} />
                             <Field name="category" placeholder="Category" value={activity.category} component={TextInput} />
                             <Field name="date" placeholder="Date" value={activity.date} component={TextInput} />
                             <Field name="city" placeholder="City" value={activity.city} component={TextInput} />
