@@ -11,6 +11,7 @@ const TextAreaInput: React.FC<IProps> = ({
     placeholder,
     meta: { touched, error }
 }) => {
+    console.log(error);
     return (
         <Form.Field error={touched && !!error} width={width}>
             <textarea rows={rows} {...input} placeholder={placeholder} />
