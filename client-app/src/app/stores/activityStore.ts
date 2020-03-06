@@ -18,10 +18,10 @@ export class ActivityStore {
 
     groupActivitiesByDate(activities: IActivity[]) {
         const sortedActivities = activities
-            .sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
+            .sort((a, b) => a.date!.getTime() - b.date!.getTime());
         
         return Object.entries(sortedActivities.reduce((activities, activity) => {
-            const date = activity.date.split("T")[0];
+            const date = activity.date!.toISOString().split("T")[0];
             activities[date] = activities[date]
                 ? [...activities[date], activity]
                 : [activity]
@@ -35,7 +35,7 @@ export class ActivityStore {
             const activities = await agent.Activities.list();
             runInAction("<try> Loading activities", () => {
                 activities.forEach(a => {
-                    a.date = a.date.split(".")[0];
+                    a.date = new Date(a.date!);
                     this.activityRegistry.set(a.id, a);
                 });
             });
@@ -109,6 +109,7 @@ export class ActivityStore {
             try {
                 activity = await agent.Activities.details(id);
                 runInAction("<try> Load activity", () => {
+                    activity.date = new Date(activity.date);
                     this.activity = activity;
                 });
             } catch (error) {
