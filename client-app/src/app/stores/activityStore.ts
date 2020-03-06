@@ -3,6 +3,7 @@ import { createContext, SyntheticEvent } from 'react'
 import { IActivity } from '../models/activity';
 import agent from '../api/agent';
 import { history } from '../..';
+import { toast } from 'react-toastify';
 
 configure({ enforceActions: "always" });
 
@@ -41,7 +42,7 @@ export class ActivityStore {
                 });
             });
         } catch (error) {
-            console.log(error);
+            console.log(error.response);
         } finally {
             runInAction("<finally> Loading activities", () => {
                 this.loadingInitial = false;
@@ -59,7 +60,8 @@ export class ActivityStore {
             });
             history.push(`/activities/${activity.id}`);
         } catch (error) {
-            console.log(error);
+            toast.error("Problem submitting data");
+            console.log(error.response);
         } finally {
             runInAction("<finally> creating an activity", () => {
                 this.submitting = false;
@@ -77,7 +79,8 @@ export class ActivityStore {
             });
             history.push(`/activities/${activity.id}`);
         } catch (error) {
-            console.log(error);
+            toast.error("Problem submitting data");
+            console.log(error.response);
         } finally {
             runInAction("<finally> Edit activity", () => {
                 this.submitting = false;
@@ -94,7 +97,7 @@ export class ActivityStore {
                 this.activityRegistry.delete(id);
             });
         } catch (error) {
-            console.log(error);
+            console.log(error.response);
         } finally {
             runInAction("<finally> Delete activity", () => {
                 this.submitting = false;
@@ -117,7 +120,7 @@ export class ActivityStore {
                     this.activityRegistry.set(activity.id, activity);
                 });
             } catch (error) {
-                console.log(error);
+                console.log(error.response);
             } finally {
                 runInAction("<finally> Load activity", () => {
                     this.loadingInitial = false;
