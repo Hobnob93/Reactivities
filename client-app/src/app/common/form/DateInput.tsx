@@ -17,7 +17,14 @@ const DateInput: React.FC<IProps> = ({
 }) => {
     return (
         <Form.Field error={touched && !!error} width={width}>
-            <DateTimePicker placeholder={placeholder} value={input.value || null} onChange={input.onChange} {...rest} />
+            <DateTimePicker 
+                placeholder={placeholder} 
+                value={input.value || null} 
+                onChange={input.onChange}
+                date={date}
+                time={time}
+                {...rest}
+            />
             {touched && error && (
                 <Label basic color="red">
                     {error}
