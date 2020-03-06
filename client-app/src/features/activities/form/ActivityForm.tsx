@@ -1,6 +1,6 @@
-import React, { useState, FormEvent, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { Segment, Form, Button, Grid } from 'semantic-ui-react'
-import { IActivityFormValues, ActivityFormValues } from '../../../app/models/activity'
+import { ActivityFormValues } from '../../../app/models/activity'
 import { v4 as uuid } from 'uuid';
 import ActivityStore from '../../../app/stores/activityStore';
 import { observer } from 'mobx-react-lite';
@@ -22,7 +22,7 @@ const ActivityForm: React.FC<RouteComponentProps<IDetailParams>> = ({
     history
 }) => {
     const activityStore = useContext(ActivityStore);
-    const {submitting, loadActivity} = activityStore;
+    const {submitting, loadActivity, createActivity, editActivity} = activityStore;
 
     const [activity, setActivity] = useState(new ActivityFormValues());
     const [loading, setLoading] = useState(false);
@@ -40,7 +40,16 @@ const ActivityForm: React.FC<RouteComponentProps<IDetailParams>> = ({
         const dateAndTime = combineDateAndTime(values.date, values.time);
         const {date, time, ...activity} = values;
         activity.date = dateAndTime;
-        console.log(activity);
+        
+        if (!activity.id) {
+            let newActivity = {
+                ...activity,
+                id: uuid()
+            };
+            createActivity(newActivity);
+        } else {
+            editActivity(activity);
+        }
     };
 
     return (
@@ -49,17 +58,69 @@ const ActivityForm: React.FC<RouteComponentProps<IDetailParams>> = ({
                 <Segment clearing>
                     <FinalForm onSubmit={handleFinalFormSubmit} initialValues={activity} render={({handleSubmit}) => (
                         <Form loading={loading} onSubmit={handleSubmit}>
-                            <Field name="title" placeholder="Title" value={activity.title} component={TextInput} />
-                            <Field name="description" placeholder="Description" value={activity.description} component={TextAreaInput} rows={3} />
-                            <Field name="category" placeholder="Category" value={activity.category} component={SelectInput} options={category} />
+                            <Field 
+                                name="title" 
+                                placeholder="Title" 
+                                value={activity.title} 
+                                component={TextInput}
+                            />
+                            <Field 
+                                name="description" 
+                                placeholder="Description"
+                                value={activity.description} 
+                                component={TextAreaInput} 
+                                rows={3} 
+                            />
+                            <Field 
+                                name="category" 
+                                placeholder="Category" 
+                                value={activity.category} 
+                                component={SelectInput} 
+                                options={category}
+                            />
                             <Form.Group widths="equal">
-                                <Field name="date" placeholder="Date" value={activity.date} component={DateInput} date={true} />
-                                <Field name="time" placeholder="Time" value={activity.time} component={DateInput} time={true} />
+                                <Field 
+                                    name="date" 
+                                    placeholder="Date" 
+                                    value={activity.date} 
+                                    component={DateInput} 
+                                    date={true}
+                                />
+                                <Field 
+                                    name="time"
+                                    placeholder="Time"
+                                    value={activity.time}
+                                    component={DateInput}
+                                    time={true}
+                                />
                             </Form.Group>
-                            <Field name="city" placeholder="City" value={activity.city} component={TextInput} />
-                            <Field name="venue" placeholder="Venue" value={activity.venue} component={TextInput} />
-                            <Button loading={submitting} disabled={loading} floated="right" positive type="submit" content="Submit" />
-                            <Button disabled={loading} floated="right" type="button" content="Cancel" onClick={() => history.push("/activities")} />
+                            <Field 
+                                name="city"
+                                placeholder="City"
+                                value={activity.city}
+                                component={TextInput}
+                            />
+                            <Field
+                                name="venue"
+                                placeholder="Venue"
+                                value={activity.venue}
+                                component={TextInput}
+                            />
+                            <Button
+                                loading={submitting}
+                                disabled={loading}
+                                floated="right"
+                                positive
+                                type="submit"
+                                content="Submit"
+                            />
+                            <Button
+                                disabled={loading}
+                                floated="right"
+                                type="button"
+                                content="Cancel"
+                                onClick={() => history.push(`/activities${activity.id ? `/${activity.id}` : ""}`)}
+                            />
                         </Form>
                     )} />
                 </Segment>
