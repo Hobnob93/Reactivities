@@ -25,8 +25,6 @@ export default class UserStore {
             history.push("/activities");
         } catch (error) {
             throw error;
-        } finally {
-
         }
     }
 }
