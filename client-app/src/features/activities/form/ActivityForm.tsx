@@ -9,7 +9,7 @@ import TextInput from '../../../app/common/form/TextInput';
 import TextAreaInput from '../../../app/common/form/TextAreaInput';
 import SelectInput from '../../../app/common/form/SelectInput';
 import DateInput from '../../../app/common/form/DateInput';
-import { category } from '../../../app/common/form/options/categoryOptions';
+import { category } from '../../../app/common/options/categoryOptions';
 import { combineDateAndTime } from '../../../app/common/util/util';
 import { combineValidators, isRequired, composeValidators, hasLengthGreaterThan } from 'revalidate';
 import { RootStoreContext } from '../../../app/stores/rootStore';
