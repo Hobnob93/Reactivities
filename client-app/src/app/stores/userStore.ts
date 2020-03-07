@@ -20,6 +20,7 @@ export default class UserStore {
             const user = await agent.User.login(values);
             runInAction("<try> Log in", () => {
                 this.user = user;
+                console.log(user);
             });
         } catch (error) {
             console.log(error);
