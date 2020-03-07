@@ -6,6 +6,7 @@ using Application.Interfaces;
 using Domain;
 using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Activities
@@ -61,6 +62,18 @@ namespace Application.Activities
                 };
 
                 context.Activities.Add(activity);
+
+                var currentUsername = userAccessor.GetCurrentUsername();
+                var user = await context.Users.SingleOrDefaultAsync(x => x.UserName == currentUsername);
+                var attendee = new UserActivity
+                {
+                    AppUser = user,
+                    Activity = activity,
+                    IsHost = true,
+                    DateJoined = DateTime.Now
+                };
+                context.UserActivities.Add(attendee);
+
                 var success = await context.SaveChangesAsync() > 0;
 
                 if (success)

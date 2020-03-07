@@ -2,6 +2,7 @@ using System.Text;
 using API.Middleware;
 using Application.Activities;
 using Application.Interfaces;
+using AutoMapper;
 using Domain;
 using FluentValidation.AspNetCore;
 using Infrastructure.Security;
@@ -37,6 +38,7 @@ namespace API
             {
                 options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
             });
+
             services.AddCors(options => {
                 options.AddPolicy("CorsPolicy", policy => {
                     policy.AllowAnyHeader()
@@ -44,7 +46,10 @@ namespace API
                         .WithOrigins("http://localhost:3000");
                 });
             });
+
             services.AddMediatR(typeof(Application.Activities.List.Handler).Assembly);
+            services.AddAutoMapper(typeof(List.Handler));
+
             services.AddControllers(opt => 
             {
                 var policy = new AuthorizationPolicyBuilder()
