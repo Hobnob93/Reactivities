@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useContext, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Container } from 'semantic-ui-react';
 import ActivityDashboard from '../../features/activities/dashboard/ActivityDashboard';
@@ -10,8 +10,26 @@ import ActivityDetails from '../../features/activities/details/ActivityDetails';
 import { ToastContainer } from 'react-toastify';
 import NotFound from './NotFound';
 import LoginForm from '../../features/activities/user/LoginForm';
+import { RootStoreContext } from '../stores/rootStore';
+import LoadingComponent from './LoadingComponent';
 
 const App: React.FC<RouteComponentProps> = ({location}) => {
+  const rootStore = useContext(RootStoreContext);
+  const {setAppLoaded, token, appLoaded} = rootStore.commonStore;
+  const {getUser} = rootStore.userStore;
+
+  useEffect(() => {
+    if (token) {
+      getUser().finally(() => setAppLoaded())
+    } else {
+      setAppLoaded();
+    }
+  }, [getUser, token, setAppLoaded]);
+
+  if (!appLoaded) {
+    return <LoadingComponent content="Loading app..." />
+  }
+
   return (
     <Fragment>
       <ToastContainer position="bottom-right" />
